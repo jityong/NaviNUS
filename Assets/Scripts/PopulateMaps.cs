@@ -9,10 +9,10 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 
-public class ReadMap : MonoBehaviour, PlacenoteListener {
+public class PopulateMaps : MonoBehaviour, PlacenoteListener {
 
     //change map name to "userinput" (hardcode first) 
-    private const string MAP_NAME = "GenericMap";
+    private string MAP_NAME = "";
 
     private UnityARSessionNativeInterface mSession;
     private bool mARInit = false;
@@ -28,12 +28,17 @@ public class ReadMap : MonoBehaviour, PlacenoteListener {
         }
     }
 
+    void handleUserInput(String input)
+    {
+        MAP_NAME = MAP_NAME + input;
+        Debug.Log("userinput: " + MAP_NAME);
+    }
+
     // Use this for initialization
     void Start() {
         Input.location.Start();
 
-        mSession = UnityARSessionNativeInterface.GetARSessionNativeInterface();
-        StartARKit();
+        //mSession = UnityARSessionNativeInterface.GetARSessionNativeInterface();
         FeaturesVisualizer.EnablePointcloud();
         LibPlacenote.Instance.RegisterListener(this);
     }
@@ -59,7 +64,8 @@ public class ReadMap : MonoBehaviour, PlacenoteListener {
         LibPlacenote.Instance.SearchMaps(MAP_NAME, (LibPlacenote.MapInfo[] obj) => {
             foreach (LibPlacenote.MapInfo map in obj) {
                 //change to contains
-                if (map.metadata.name.MAP_NAME) {
+                if (map.metadata.name.Contains(MAP_NAME)) {
+                    Debug.Log("IN findmap method:" + MAP_NAME);
                     mSelectedMapInfo = map;
                     Debug.Log("FOUND MAP: " + mSelectedMapInfo.placeId);
                     LoadMap();
