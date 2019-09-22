@@ -11,10 +11,11 @@ using Newtonsoft.Json;
 
 public class ReadMap : MonoBehaviour, PlacenoteListener {
 
-    private const string MAP_NAME = "GenericMap";
+    private string mapName = "GenericMap";
 
     private UnityARSessionNativeInterface mSession;
     private bool mARInit = false;
+    private bool isNavReady = false; 
 
     private LibPlacenote.MapMetadataSettable mCurrMapDetails;
 
@@ -26,6 +27,9 @@ public class ReadMap : MonoBehaviour, PlacenoteListener {
             return mSelectedMapInfo != null ? mSelectedMapInfo.placeId : null;
         }
     }
+
+    public GameObject navigationPanel;
+    public GameObject navigationPanelText;
 
     // Use this for initialization
     void Start() {
@@ -42,7 +46,7 @@ public class ReadMap : MonoBehaviour, PlacenoteListener {
 
     // Update is called once per frame
     void Update() {
-        if (!mARInit && LibPlacenote.Instance.Initialized())
+        if (!mARInit && LibPlacenote.Instance.Initialized() && isNavReady)
         {
             Debug.Log("Ready to Start!");
             mARInit = true;
@@ -54,9 +58,9 @@ public class ReadMap : MonoBehaviour, PlacenoteListener {
 
     void FindMap() {
         //get metadata
-        LibPlacenote.Instance.SearchMaps(MAP_NAME, (LibPlacenote.MapInfo[] obj) => {
+        LibPlacenote.Instance.SearchMaps(mapName, (LibPlacenote.MapInfo[] obj) => {
             foreach (LibPlacenote.MapInfo map in obj) {
-                if (map.metadata.name == MAP_NAME) {
+                if (map.metadata.name == mapName) {
                     mSelectedMapInfo = map;
                     Debug.Log("FOUND MAP: " + mSelectedMapInfo.placeId);
                     LoadMap();
@@ -107,17 +111,27 @@ public class ReadMap : MonoBehaviour, PlacenoteListener {
     public void OnStatusChange(LibPlacenote.MappingStatus prevStatus, LibPlacenote.MappingStatus currStatus) {
         Debug.Log("prevStatus: " + prevStatus.ToString() + " currStatus: " + currStatus.ToString());
         if (currStatus == LibPlacenote.MappingStatus.RUNNING && prevStatus == LibPlacenote.MappingStatus.LOST) {
-            Debug.Log("Localized: " + mSelectedMapInfo.metadata.name);
+            //Debug.Log("Localized: " + mSelectedMapInfo.metadata.name);
+            string[] mapNameArray = mapName.Split('/');
+            navigationPanelText.GetComponent<Text>().text =
+                "Navigating to " + mapNameArray[0] + ", Floor " + mapNameArray[1] + ", " + mapNameArray[2];
             GetComponent<CustomShapeManager>().LoadShapesJSON(mSelectedMapInfo.metadata.userdata);
             FeaturesVisualizer.DisablePointcloud();
         } else if (currStatus == LibPlacenote.MappingStatus.RUNNING && prevStatus == LibPlacenote.MappingStatus.WAITING) {
             Debug.Log("Mapping");
         } else if (currStatus == LibPlacenote.MappingStatus.LOST) {
-            Debug.Log("Searching for position lock");
+            navigationPanelText.GetComponent<Text>().text = "Locating...";
+            //Debug.Log("Searching for position lock");
         } else if (currStatus == LibPlacenote.MappingStatus.WAITING) {
             if (GetComponent<CustomShapeManager>().shapeObjList.Count != 0) {
                 //GetComponent<CustomShapeManager>().ClearShapes();
             }
         }
+    }
+
+    public void SetMapName(String mapName) {
+        this.mapName = mapName;
+        isNavReady = true;
+        navigationPanel.SetActive(true);
     }
 }
