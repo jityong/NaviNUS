@@ -53,7 +53,7 @@ public class NavController : MonoBehaviour {
     void InitNav(){
         if (!_initialized) {
             _initialized = true;
-            Debug.Log("INTIALIZING NAVIGATION!!!");
+            Debug.Log("INITIALIZING NAVIGATION!!!");
             Node[] allNodes = FindObjectsOfType<Node>();
             Debug.Log("NODES: " + allNodes.Length);
             Node closestNode = ReturnClosestNode(allNodes, transform.position);
