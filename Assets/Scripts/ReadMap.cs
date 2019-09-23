@@ -74,14 +74,8 @@ public class ReadMap : MonoBehaviour, PlacenoteListener {
     public GameObject destination4;
     public GameObject destination5;
 
-
-
-
-
-
-
-
-
+    public GameObject loadingText;
+    public GameObject navigationButton;
 
     //public List<GameObject> buildingList = new List<GameObject>();
 
@@ -118,7 +112,8 @@ public class ReadMap : MonoBehaviour, PlacenoteListener {
     }
 
     private void getBuildings()
-    {        
+    {
+        loadingText.SetActive(true);
         LibPlacenote.Instance.ListMaps((LibPlacenote.MapInfo[] obj) => {
             foreach (LibPlacenote.MapInfo map in obj)
             {
@@ -138,6 +133,8 @@ public class ReadMap : MonoBehaviour, PlacenoteListener {
             Debug.Log("Exit getBuildings()");
             Debug.Log("buildings: " + string.Join(", ", buildings.ToArray()));
             Debug.Log("number of buildings1:" + buildings.Count);
+            buildings.Sort();
+            loadingText.SetActive(false);
             if (buildings.Count >= 1)
             {
                 buildingButton1.SetActive(true);
@@ -171,6 +168,7 @@ public class ReadMap : MonoBehaviour, PlacenoteListener {
 
     public void getFloors()
     {
+        loadingText.SetActive(true);
         //List<string> buildingsHere = new List<string>();
         LibPlacenote.Instance.ListMaps((LibPlacenote.MapInfo[] obj) => {
             foreach (LibPlacenote.MapInfo map in obj)
@@ -198,6 +196,8 @@ public class ReadMap : MonoBehaviour, PlacenoteListener {
             Debug.Log("exit getFloors()");
 
             Debug.Log("floors: " + string.Join(", ", floors.ToArray()));
+            floors.Sort();
+            loadingText.SetActive(false);
             if (floors.Count >= 1)
             {
 
@@ -229,6 +229,7 @@ public class ReadMap : MonoBehaviour, PlacenoteListener {
     }
     public void getDestination()
     {
+        loadingText.SetActive(true);
         //List<string> buildingsHere = new List<string>();
         LibPlacenote.Instance.ListMaps((LibPlacenote.MapInfo[] obj) => {
             foreach (LibPlacenote.MapInfo map in obj)
@@ -257,6 +258,8 @@ public class ReadMap : MonoBehaviour, PlacenoteListener {
             }
             Debug.Log("exit getDestination()");
             Debug.Log("destinations: " + string.Join(", ", destinations.ToArray()));
+            destinations.Sort();
+            loadingText.SetActive(false);
             if (destinations.Count >= 1)
             {
 
@@ -364,6 +367,7 @@ public class ReadMap : MonoBehaviour, PlacenoteListener {
             string[] mapNameArray = mapName.Split('/');
             navigationPanelText.GetComponent<Text>().text =
                 "Navigating to " + mapNameArray[0] + ", Floor " + mapNameArray[1] + ", " + mapNameArray[2];
+            navigationButton.SetActive(true);
             GetComponent<CustomShapeManager>().LoadShapesJSON(mSelectedMapInfo.metadata.userdata);
             FeaturesVisualizer.DisablePointcloud();
         } else if (currStatus == LibPlacenote.MappingStatus.RUNNING && prevStatus == LibPlacenote.MappingStatus.WAITING) {

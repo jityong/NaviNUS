@@ -219,5 +219,16 @@ public class NavController : MonoBehaviour {
             }
         }
     }
+
+    public void toggleMap() {
+        if (graphPanel.activeSelf)
+        {
+            graphPanel.SetActive(false);
+        }
+        else
+        {
+            graphPanel.SetActive(true);
+        }
+    }
     
 }
