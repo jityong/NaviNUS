@@ -18,7 +18,8 @@ public class ReadMap : MonoBehaviour, PlacenoteListener {
 
     private UnityARSessionNativeInterface mSession;
     private bool mARInit = false;
-    private bool isNavReady = false; 
+    private bool isNavReady = false;
+    private bool isNavigating = false;
 
     private LibPlacenote.MapMetadataSettable mCurrMapDetails;
 
@@ -218,6 +219,7 @@ public class ReadMap : MonoBehaviour, PlacenoteListener {
         Debug.Log("prevStatus: " + prevStatus.ToString() + " currStatus: " + currStatus.ToString());
         if (currStatus == LibPlacenote.MappingStatus.RUNNING && prevStatus == LibPlacenote.MappingStatus.LOST) {
             //Debug.Log("Localized: " + mSelectedMapInfo.metadata.name);
+            isNavigating = true;
             string[] mapNameArray = mapName.Split('/');
             navigationPanelText.GetComponent<Text>().text =
                 "Navigating to " + mapNameArray[0] + ", Floor " + mapNameArray[1] + ", " + mapNameArray[2];
@@ -226,7 +228,10 @@ public class ReadMap : MonoBehaviour, PlacenoteListener {
         } else if (currStatus == LibPlacenote.MappingStatus.RUNNING && prevStatus == LibPlacenote.MappingStatus.WAITING) {
             Debug.Log("Mapping");
         } else if (currStatus == LibPlacenote.MappingStatus.LOST) {
-            navigationPanelText.GetComponent<Text>().text = "Locating...";
+            if (!isNavigating)
+            {
+                navigationPanelText.GetComponent<Text>().text = "Locating...";
+            }
             //Debug.Log("Searching for position lock");
         } else if (currStatus == LibPlacenote.MappingStatus.WAITING) {
             if (GetComponent<CustomShapeManager>().shapeObjList.Count != 0) {
