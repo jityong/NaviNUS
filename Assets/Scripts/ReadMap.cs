@@ -64,6 +64,7 @@ public class ReadMap : MonoBehaviour, PlacenoteListener {
         if (isNavReady)
         {            
             FindMap();
+            isNavReady = false;
         }
     }
 
