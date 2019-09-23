@@ -14,7 +14,7 @@ public class CreateMap : MonoBehaviour, PlacenoteListener {
 
     public Text debugText;
 
-    private const string MAP_NAME = "GenericMap";
+    private string mapName = "GenericMap";
 
     private CustomShapeManager shapeManager;
 
@@ -41,6 +41,8 @@ public class CreateMap : MonoBehaviour, PlacenoteListener {
         StartARKit();
         FeaturesVisualizer.EnablePointcloud();
         LibPlacenote.Instance.RegisterListener(this);
+
+        GetComponentInChildren<InputField>().text = mapName;
     }
 
     void OnDisable() {
@@ -131,10 +133,10 @@ public class CreateMap : MonoBehaviour, PlacenoteListener {
         }
 
         // Overwrite map if it exists.
-        LibPlacenote.Instance.SearchMaps(MAP_NAME, (LibPlacenote.MapInfo[] obj) => {
+        LibPlacenote.Instance.SearchMaps(mapName, (LibPlacenote.MapInfo[] obj) => {
             bool foundMap = false;
             foreach (LibPlacenote.MapInfo map in obj) {
-                if (map.metadata.name == MAP_NAME) {
+                if (map.metadata.name == mapName) {
                     foundMap = true;
                     LibPlacenote.Instance.DeleteMap(map.placeId, (deleted, errMsg) => {
                         if (deleted) {
@@ -172,7 +174,7 @@ public class CreateMap : MonoBehaviour, PlacenoteListener {
                     LibPlacenote.Instance.StopSession();
 
                     LibPlacenote.MapMetadataSettable metadata = new LibPlacenote.MapMetadataSettable();
-                    metadata.name = MAP_NAME;
+                    metadata.name = mapName;
                     Debug.Log("Saved Map Name: " + metadata.name);
 
                     JObject userdata = new JObject();
@@ -221,5 +223,9 @@ public class CreateMap : MonoBehaviour, PlacenoteListener {
                 GetComponent<CustomShapeManager>().ClearShapes();
             }
         }
+    }
+
+    public void SetMapName(String mapName) {
+        this.mapName = mapName;
     }
 }

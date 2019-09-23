@@ -54,7 +54,7 @@ public class NavController : MonoBehaviour {
     IEnumerator DelayNavigation() {
         while(FindObjectOfType<DiamondBehavior>() == null){
             yield return new WaitForSeconds(.5f);
-            Debug.Log("waiting for shapes to load...");
+            //Debug.Log("waiting for shapes to load...");
         }
         InitNav();
     }
