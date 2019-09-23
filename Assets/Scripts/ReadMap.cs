@@ -10,6 +10,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 
 public class ReadMap : MonoBehaviour, PlacenoteListener {
+    
 
     private List<string> buildings = new List<string>();
     private List<string> floors = new List<string>();
@@ -34,6 +35,55 @@ public class ReadMap : MonoBehaviour, PlacenoteListener {
 
     public GameObject navigationPanel;
     public GameObject navigationPanelText;
+    public GameObject buildingButton1;
+    public GameObject buildingButton2;
+    public GameObject buildingButton3;
+    public GameObject buildingButton4;
+    public GameObject buildingButton5;
+
+    public GameObject floorButton1;
+    public GameObject floorButton2;
+    public GameObject floorButton3;
+    public GameObject floorButton4;
+    public GameObject floorButton5;
+
+    public GameObject destinationButton1;
+    public GameObject destinationButton2;
+    public GameObject destinationButton3;
+    public GameObject destinationButton4;
+    public GameObject destinationButton5;
+
+
+
+
+    public GameObject building1;  
+    public GameObject building2;
+    public GameObject building3;
+    public GameObject building4;
+    public GameObject building5;
+
+    public GameObject floor1;
+    public GameObject floor2;
+    public GameObject floor3;
+    public GameObject floor4;
+    public GameObject floor5;
+
+    public GameObject destination1;
+    public GameObject destination2;
+    public GameObject destination3;
+    public GameObject destination4;
+    public GameObject destination5;
+
+
+
+
+
+
+
+
+
+
+    //public List<GameObject> buildingList = new List<GameObject>();
 
     // Use this for initialization
     void Start() {
@@ -42,9 +92,7 @@ public class ReadMap : MonoBehaviour, PlacenoteListener {
         mSession = UnityARSessionNativeInterface.GetARSessionNativeInterface();
         StartARKit();
         FeaturesVisualizer.EnablePointcloud();
-        LibPlacenote.Instance.RegisterListener(this);
-        //getBuildings();
-        //Debug.Log("After get building in Start()");
+        LibPlacenote.Instance.RegisterListener(this);        
 
     }
 
@@ -69,7 +117,7 @@ public class ReadMap : MonoBehaviour, PlacenoteListener {
         }
     }
 
-    public void getBuildings()
+    private void getBuildings()
     {        
         LibPlacenote.Instance.ListMaps((LibPlacenote.MapInfo[] obj) => {
             foreach (LibPlacenote.MapInfo map in obj)
@@ -83,12 +131,42 @@ public class ReadMap : MonoBehaviour, PlacenoteListener {
                     {
                         buildings.Add(buildingName);
                         Debug.Log("buildingName:" + buildingName);
+                        Debug.Log("BuildingName0 " + buildings[0]);
                     }
                 }                
             }
             Debug.Log("Exit getBuildings()");
-        });
-        Debug.Log("buildings: " + string.Join(", ", buildings.ToArray()));
+            Debug.Log("buildings: " + string.Join(", ", buildings.ToArray()));
+            Debug.Log("number of buildings1:" + buildings.Count);
+            if (buildings.Count >= 1)
+            {
+                buildingButton1.SetActive(true);
+                building1.GetComponent<Text>().text = buildings[0];
+                Debug.Log("Building button 1 is assigned with " + buildings[0]);
+                Debug.Log("number of buildings2:" + buildings.Count);
+            }
+            if (buildings.Count >= 2)
+            {
+                buildingButton2.SetActive(true);
+                building2.GetComponent<Text>().text = buildings[1];
+            }
+            if (buildings.Count >= 3)
+            {
+                buildingButton3.SetActive(true);
+                building3.GetComponent<Text>().text = buildings[2];
+            }
+            if (buildings.Count >= 4)
+            {
+                buildingButton4.SetActive(true);
+                building4.GetComponent<Text>().text = buildings[3];
+            }
+            if (buildings.Count >= 5)
+            {
+                buildingButton5.SetActive(true);
+                building5.GetComponent<Text>().text = buildings[4];
+            }
+        });        
+ 
     }
 
     public void getFloors()
@@ -118,8 +196,36 @@ public class ReadMap : MonoBehaviour, PlacenoteListener {
                 }                
             }
             Debug.Log("exit getFloors()");
+
+            Debug.Log("floors: " + string.Join(", ", floors.ToArray()));
+            if (floors.Count >= 1)
+            {
+
+                floor1.GetComponent<Text>().text = floors[0];
+                floorButton1.SetActive(true);
+            }
+            if (floors.Count >= 2)
+            {
+                floor2.GetComponent<Text>().text = floors[1];
+                floorButton2.SetActive(true);
+            }
+            if (floors.Count >= 3)
+            {
+                floor3.GetComponent<Text>().text = floors[2];
+                floorButton3.SetActive(true);
+            }
+            if (floors.Count >= 4)
+            {
+                floor4.GetComponent<Text>().text = floors[3];
+                floorButton4.SetActive(true);
+            }
+            if (floors.Count >= 5)
+            {
+                floor5.GetComponent<Text>().text = floors[4];
+                floorButton5.SetActive(true);
+            }
         });
-        Debug.Log("floors: " + string.Join(", ", floors.ToArray()));
+        
     }
     public void getDestination()
     {
@@ -150,17 +256,52 @@ public class ReadMap : MonoBehaviour, PlacenoteListener {
                 }
             }
             Debug.Log("exit getDestination()");
+            Debug.Log("destinations: " + string.Join(", ", destinations.ToArray()));
+            if (destinations.Count >= 1)
+            {
+
+                destination1.GetComponent<Text>().text = destinations[0];
+                destinationButton1.SetActive(true);
+            }
+            if (destinations.Count >= 2)
+            {
+                destination2.GetComponent<Text>().text = destinations[1];
+                destinationButton2.SetActive(true);
+            }
+            if (destinations.Count >= 3)
+            {
+                destination3.GetComponent<Text>().text = destinations[2];
+                destinationButton3.SetActive(true);
+            }
+            if (destinations.Count >= 4)
+            {
+                destination4.GetComponent<Text>().text = destinations[3];
+                destinationButton4.SetActive(true);
+            }
+            if (destinations.Count >= 5)
+            {
+                destination5.GetComponent<Text>().text = destinations[4];
+                destinationButton5.SetActive(true);
+            }
 
         });
-        Debug.Log("destinations: " + string.Join(", ", destinations.ToArray()));
+        
     }
 
 
-    public void handleUserInput(String input)
+    public void handleBuildingUserInput(int input)
     {
-        mapName += input + "/";
-        Debug.Log("userinput: " + mapName);
+        Debug.Log("IM HERE IN ");
+        string current = buildings[input - 1];
+        mapName += current + "/";
+        Debug.Log("appending buildingName to mapName: " + current);
     }
+    public void handleFloorUserInput(int input)
+    {
+        string current = floors[input - 1];
+        mapName += current + "/";
+        Debug.Log("appending floorName to mapName: " + current);
+    }    
 
     void FindMap() {
         //get metadata
@@ -240,8 +381,10 @@ public class ReadMap : MonoBehaviour, PlacenoteListener {
         }
     }
 
-    public void SetMapName(String mapName) {
-        this.mapName += mapName;
+    public void SetMapName(int index) {
+        string current = destinations[index-1];
+        this.mapName += current;
+        Debug.Log("final mapName:" + this.mapName);
         isNavReady = true;
         navigationPanel.SetActive(true);
     }

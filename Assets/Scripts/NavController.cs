@@ -95,7 +95,7 @@ public class NavController : MonoBehaviour {
 
             // setPanel to be active
             Debug.Log("Setting to be true");
-            graphPanel.SetActive(true);
+            //graphPanel.SetActive(true);
 
             // Populate windowGraph
             Debug.Log("binding component...");
