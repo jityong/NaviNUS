@@ -5,7 +5,8 @@ Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: waypoint
   m_Shader: {fileID: 4800000, guid: 0fc06dbae827e7646bd0850ff121daa5, type: 3}
   m_ShaderKeywords: _EMISSION _SPECULAR_SETUP
@@ -89,6 +90,6 @@ Material:
     m_Colors:
     - _Color: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 1}
     - _EmissionColor: {r: 15.210199, g: 5.849327, b: 0.6457157, a: 1}
-    - _MKGlowColor: {r: 0.94509804, g: 0.44276926, b: 0, a: 1}
-    - _MKGlowTexColor: {r: 1, g: 0.9780377, b: 0, a: 1}
+    - _MKGlowColor: {r: 0.93333334, g: 0.069421835, b: 0, a: 1}
+    - _MKGlowTexColor: {r: 0.32543933, g: 0.9433962, b: 0, a: 1}
     - _SpecColor: {r: 0, g: 0, b: 0, a: 1}
