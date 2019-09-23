@@ -22,7 +22,6 @@ public class NavController : MonoBehaviour {
     private RectTransform graphContainer; //added
 
     private void Start() {
-        graphContainer = graphContainerPanel.GetComponent<RectTransform>();
 #if UNITY_EDITOR
         InitializeNavigation();
 #endif
@@ -94,17 +93,25 @@ public class NavController : MonoBehaviour {
             path[0].Activate(true);
             _initializedComplete = true;
 
-            // Populate windowGraph
-            showGraphWithTargetAndAllNodes(path, target);
-
             // setPanel to be active
+            Debug.Log("Setting to be true");
             graphPanel.SetActive(true);
+
+            // Populate windowGraph
+            Debug.Log("binding component...");
+            graphContainer = graphContainerPanel.GetComponent<RectTransform>();
+            Debug.Log("binding done");
+            Debug.Log("calling showGraph");
+            showGraphWithTargetAndAllNodes(path, target);
+            Debug.Log("showGraph done");
+
         }
     }
 
     // Takes in the path and the Dest Node. Creates Sprite for them and draws path.
     private void showGraphWithTargetAndAllNodes(List<Node> path, Node target)
     {
+        Debug.Log("Starting showGraph fn...");
         int totalNumberOfNodes = path.Count + 1; //because of target ndoe
         float graphHeight = graphContainer.sizeDelta.y;
         float graphWidth = graphContainer.sizeDelta.x;
@@ -115,12 +122,12 @@ public class NavController : MonoBehaviour {
         {
             if (i == (totalNumberOfNodes - 1))
             {
-                yArr[totalNumberOfNodes] = (float)target.pos.y;
-                xArr[totalNumberOfNodes] = (float)target.pos.x;
+                yArr[i] = (float)target.pos.z;
+                xArr[i] = (float)target.pos.x;
             }
             else
             {
-                yArr[i] = (float)path[i].pos.y;
+                yArr[i] = (float)path[i].pos.z;
                 xArr[i] = (float)path[i].pos.x;
             }
         }
@@ -137,12 +144,16 @@ public class NavController : MonoBehaviour {
             if (i == (totalNumberOfNodes - 1)) // for the last, Dest Node
             {
                 GameObject targetGameObject = CreateTarget(new Vector2(xPosition, yPosition));
+                Debug.Log("Created targetGameObject");
+                Debug.Log("xPosition is " + xPosition + " yPosition is" + yPosition);
                 joinLinesForPath(lastGameObject.GetComponent<RectTransform>().anchoredPosition,
                                              targetGameObject.GetComponent<RectTransform>().anchoredPosition);
             }
             else
             {
                 GameObject circleGameObject = CreateCircle(new Vector2(xPosition, yPosition));
+                Debug.Log("Created circleGameObject");
+                Debug.Log("xPosition is " + xPosition + " yPosition is" + yPosition);
                 if (lastGameObject != null)
                 {
                     joinLinesForPath(lastGameObject.GetComponent<RectTransform>().anchoredPosition,
